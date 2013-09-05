@@ -1,2 +1,4 @@
 logging:
   level: DEBUG
+
+pidfile: /tmp/service-broker-example.pid
