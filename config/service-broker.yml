@@ -2,3 +2,6 @@ logging:
   level: DEBUG
 
 pidfile: /tmp/service-broker-example.pid
+
+nats:
+  url: nats://localhost
