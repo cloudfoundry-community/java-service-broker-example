@@ -5,3 +5,8 @@ pidfile: /tmp/service-broker-example.pid
 
 nats:
   url: nats://localhost
+
+host:
+  local: 127.0.0.1
+  public: service-broker-example.app2-dev.lds.org
+  port: 8080
