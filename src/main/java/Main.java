@@ -7,7 +7,8 @@ import cf.nats.DefaultCfNats;
 import cf.nats.RouterRegisterHandler;
 import cf.spring.ClientTokenProviderFactoryBean;
 import cf.spring.HttpClientFactoryBean;
-import cf.spring.YamlPropertyContextInitializer;
+import cf.spring.config.ServiceBroker;
+import cf.spring.config.YamlPropertyContextInitializer;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import nats.client.Nats;
@@ -30,6 +31,7 @@ import java.io.IOException;
  */
 @Configuration
 @EnableAutoConfiguration
+@ServiceBroker
 public class Main {
 
 	@Bean
@@ -62,12 +64,12 @@ public class Main {
 		return new HttpClientFactoryBean();
 	}
 
-	@Bean
+	@Bean(name = "cloudControllerClient")
 	CloudController cloudController(HttpClient client, Environment environment) {
 		return new DefaultCloudController(client, environment.getProperty("cloud_controller_url"));
 	}
 
-	@Bean
+	@Bean(name = "clientToken")
 	FactoryBean<TokenProvider> tokenProvider(CloudController cloudController, Environment environment) {
 		return new ClientTokenProviderFactoryBean(
 				cloudController,
@@ -76,7 +78,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		final SpringApplication springApplication = new SpringApplication(Main.class);
+		final SpringApplication springApplication = new SpringApplication(Main.class, ExampleProvisioner.class);
 		springApplication.addInitializers(new YamlPropertyContextInitializer(
 				"config",
 				"config",
